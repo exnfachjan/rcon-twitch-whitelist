@@ -1,17 +1,4 @@
-name: Build & Push to Docker Hub
-
-on:
-  push:
-    branches: ["main"]
-    tags: ["v*"]
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
+- name: Checkout
         uses: actions/checkout@v4
 
       - name: Docker Meta
@@ -22,7 +9,6 @@ jobs:
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Login to Docker Hub
@@ -32,7 +18,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
