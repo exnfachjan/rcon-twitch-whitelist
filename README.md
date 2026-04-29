@@ -3,7 +3,7 @@
 [![Docker Hub](https://img.shields.io/docker/pulls/exnfachjan/twitch-whitelist-bot)](https://hub.docker.com/r/exnfachjan/twitch-whitelist-bot)
 [![Build & Push](https://github.com/exnfachjan/twitch-whitelist-bot/actions/workflows/docker.yml/badge.svg)](https://github.com/exnfachjan/twitch-whitelist-bot/actions)
 
-Ein Bot der Twitch Channel Points Einlösungen mit einem Minecraft Server Whitelist via RCON verbindet. TEST
+Ein Bot der Twitch Channel Points Einlösungen mit einem Minecraft Server Whitelist via RCON verbindet.
 
 ## Features
 
