@@ -11,6 +11,7 @@ A bot that connects Twitch Channel Points redemptions to a Minecraft server whit
 - 🔒 Each Twitch account can only redeem **one** whitelist spot
 - 🔄 Automatic token refresh every 3 hours
 - 🤖 Bot replies in Twitch chat with confirmation or error message
+- 🌍 Supports **English** and **German** chat messages
 - 🐳 Docker-based – runs identically everywhere
 
 ## Quick Start
@@ -50,6 +51,16 @@ docker pull exnfachjan/twitch-whitelist-bot:latest
 | `RCON_HOST`             | Minecraft server IP (`host.docker.internal` for localhost)                                        |
 | `RCON_PORT`             | RCON port (default: `25575`)                                                                      |
 | `RCON_PASSWORD`         | RCON password from `server.properties`                                                            |
+| `BOT_LANGUAGE`          | Chat message language: `EN` (English) or `DE` (German) – default: `EN`                            |
+
+## Language Support
+
+Set `BOT_LANGUAGE` in your `.env` to change the language of all Twitch chat responses:
+
+| Value | Language   |
+| ----- | ---------- |
+| `EN`  | 🇬🇧 English |
+| `DE`  | 🇩🇪 German  |
 
 ## Generating Tokens
 
