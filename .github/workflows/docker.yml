@@ -41,3 +41,4 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/twitch-whitelist-bot
+          short-description: ${{ github.event.repository.description }}

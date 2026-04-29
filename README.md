@@ -2,72 +2,72 @@
 
 [![Docker Hub](https://img.shields.io/docker/pulls/exnfachjan/twitch-whitelist-bot)](https://hub.docker.com/r/exnfachjan/twitch-whitelist-bot)
 
-Ein Bot der Twitch Channel Points Einlösungen mit einem Minecraft Server Whitelist via RCON verbindet. 1
+A bot that connects Twitch Channel Points redemptions to a Minecraft server whitelist via RCON.
 
 ## Features
 
-- 🎯 Reagiert auf Twitch Channel Points Einlösungen
-- ✅ Überprüft Minecraft-Usernamen via Mojang API
-- 🔒 Jeder Twitch-Account kann nur **einmal** einen Whitelist-Platz einlösen
-- 🔄 Automatischer Token-Refresh alle 3 Stunden
-- 🤖 Bot antwortet im Twitch-Chat mit Bestätigung oder Fehlermeldung
-- 🐳 Docker-basiert – läuft überall identisch
+- 🎯 Reacts to Twitch Channel Points redemptions
+- ✅ Validates Minecraft usernames via Mojang API
+- 🔒 Each Twitch account can only redeem **one** whitelist spot
+- 🔄 Automatic token refresh every 3 hours
+- 🤖 Bot replies in Twitch chat with confirmation or error message
+- 🐳 Docker-based – runs identically everywhere
 
-## Schnellstart
+## Quick Start
 
 ```bash
-# 1. Repo klonen
+# 1. Clone the repo
 git clone https://github.com/exnfachjan/twitch-whitelist-bot
 cd twitch-whitelist-bot
 
-# 2. .env erstellen
+# 2. Create .env
 cp .env.example .env
-nano .env  # Werte eintragen
+nano .env  # Fill in your values
 
-# 3. Starten
+# 3. Start
 docker compose up -d
 ```
 
-## Oder direkt von Docker Hub
+## Or pull directly from Docker Hub
 
 ```bash
 docker pull exnfachjan/twitch-whitelist-bot:latest
 ```
 
-## Benötigte .env Werte
+## Required .env Variables
 
-| Variable                | Beschreibung                                                                                    |
-| ----------------------- | ----------------------------------------------------------------------------------------------- |
-| `TWITCH_CLIENT_ID`      | Twitch App ID von [dev.twitch.tv](https://dev.twitch.tv/console)                                |
-| `TWITCH_CLIENT_SECRET`  | Twitch App Secret                                                                               |
-| `TWITCH_ACCESS_TOKEN`   | OAuth Access Token (siehe unten)                                                                |
-| `TWITCH_REFRESH_TOKEN`  | OAuth Refresh Token (siehe unten)                                                               |
-| `TWITCH_BOT_USERNAME`   | Twitch Bot-Account Name                                                                         |
-| `TWITCH_BOT_TOKEN`      | Chat Token mit `oauth:` prefix von [twitchtokengenerator.com](https://twitchtokengenerator.com) |
-| `TWITCH_CHANNEL`        | Dein Twitch Kanal (ohne #)                                                                      |
-| `TWITCH_BROADCASTER_ID` | Deine Twitch User-ID (siehe unten)                                                              |
-| `TWITCH_REWARD_TITLE`   | Exakter Name der Kanalpunktebelohnung                                                           |
-| `RCON_HOST`             | IP des Minecraft Servers (`host.docker.internal` für localhost)                                 |
-| `RCON_PORT`             | RCON Port (Standard: `25575`)                                                                   |
-| `RCON_PASSWORD`         | RCON Passwort aus `server.properties`                                                           |
+| Variable                | Description                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------- |
+| `TWITCH_CLIENT_ID`      | Twitch App ID from [dev.twitch.tv](https://dev.twitch.tv/console)                                 |
+| `TWITCH_CLIENT_SECRET`  | Twitch App Secret                                                                                 |
+| `TWITCH_ACCESS_TOKEN`   | OAuth Access Token (see below)                                                                    |
+| `TWITCH_REFRESH_TOKEN`  | OAuth Refresh Token (see below)                                                                   |
+| `TWITCH_BOT_USERNAME`   | Twitch bot account username                                                                       |
+| `TWITCH_BOT_TOKEN`      | Chat token with `oauth:` prefix from [twitchtokengenerator.com](https://twitchtokengenerator.com) |
+| `TWITCH_CHANNEL`        | Your Twitch channel name (without #)                                                              |
+| `TWITCH_BROADCASTER_ID` | Your Twitch user ID (see below)                                                                   |
+| `TWITCH_REWARD_TITLE`   | Exact name of the channel points reward                                                           |
+| `RCON_HOST`             | Minecraft server IP (`host.docker.internal` for localhost)                                        |
+| `RCON_PORT`             | RCON port (default: `25575`)                                                                      |
+| `RCON_PASSWORD`         | RCON password from `server.properties`                                                            |
 
-## Tokens generieren
+## Generating Tokens
 
 ### Access & Refresh Token
 
-Öffne im Browser (ersetze `DEINE_CLIENT_ID`):
+Open in your browser (replace `YOUR_CLIENT_ID`):
 
 ```
-https://id.twitch.tv/oauth2/authorize?client_id=DEINE_CLIENT_ID&redirect_uri=http://localhost&response_type=code&scope=channel:read:redemptions+chat:read+chat:edit
+https://id.twitch.tv/oauth2/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=http://localhost&response_type=code&scope=channel:read:redemptions+chat:read+chat:edit
 ```
 
-Den `code` aus der Redirect-URL verwenden:
+Use the `code` from the redirect URL:
 
 ```bash
 curl -X POST "https://id.twitch.tv/oauth2/token" \
-  -d "client_id=DEINE_CLIENT_ID" \
-  -d "client_secret=DEIN_CLIENT_SECRET" \
-  -d "code=CODE_AUS_URL" \
+  -d "client_id=YOUR_CLIENT_ID" \
+  -d "client_secret=YOUR_CLIENT_SECRET" \
+  -d "code=CODE_FROM_URL" \
   -d "grant_type=authorization_code" \
   -d "redirect_uri=http://localhost"
 ```
@@ -75,9 +75,9 @@ curl -X POST "https://id.twitch.tv/oauth2/token" \
 ### Broadcaster ID
 
 ```bash
-curl -H "Client-Id: DEINE_CLIENT_ID" \
-     -H "Authorization: Bearer DEIN_ACCESS_TOKEN" \
-     "https://api.twitch.tv/helix/users?login=DEIN_KANAL"
+curl -H "Client-Id: YOUR_CLIENT_ID" \
+     -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+     "https://api.twitch.tv/helix/users?login=YOUR_CHANNEL"
 ```
 
 ## Minecraft server.properties
@@ -85,41 +85,32 @@ curl -H "Client-Id: DEINE_CLIENT_ID" \
 ```properties
 enable-rcon=true
 rcon.port=25575
-rcon.password=DEIN_SICHERES_PASSWORT
+rcon.password=YOUR_SECURE_PASSWORD
 ```
 
-## Bot verwalten
+## Managing the Bot
 
 ```bash
 # Logs
 docker compose logs -f
 
-# Neustart
+# Restart
 docker compose restart
 
-# Stoppen
+# Stop
 docker compose down
 
 # Update
 docker compose pull && docker compose up -d
 ```
 
-## Whitelist Datenbank
+## Whitelist Database
 
-Die Datenbank liegt in `./data/whitelist_db.json`. Um einen Eintrag zu entfernen:
+The database is stored in `./data/whitelist_db.json`. To remove an entry (e.g. to allow a re-whitelist):
 
 ```bash
 nano data/whitelist_db.json
 ```
-
-## GitHub Actions (Auto-Build)
-
-Bei jedem Push auf `main` wird automatisch ein neues Docker Image gebaut und auf Docker Hub gepusht.
-
-**Secrets in GitHub setzen:**
-
-- `DOCKERHUB_USERNAME` – Dein Docker Hub Username
-- `DOCKERHUB_TOKEN` – Docker Hub Access Token ([hub.docker.com/settings/security](https://hub.docker.com/settings/security))
 
 ## License
 
