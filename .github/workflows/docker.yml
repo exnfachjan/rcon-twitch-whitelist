@@ -1,4 +1,15 @@
-- name: Checkout
+name: Build & Push to Docker Hub
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Docker Meta
@@ -7,9 +18,8 @@
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/twitch-whitelist-bot
           tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=semver,pattern={{version}}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
